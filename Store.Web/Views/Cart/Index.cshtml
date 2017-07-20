@@ -1,0 +1,44 @@
+﻿@model Store.Web.Models.CartIndexViewModel
+@{ViewBag.Title = "你的购物篮"; }
+<h2>购物篮</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>数量</th>
+            <th>商品</th>
+            <th class="text-right">价格</th>
+            <th class="text-right">小计</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td>@line.Quantity</td>
+                <td>@line.Product.Name</td>
+                <td class="text-right">@line.Product.Price.ToString("c")</td>
+                <td class="text-right">@((line.Product.Price*line.Quantity).ToString("c"))</td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromCart","Cart"))
+                    {
+                        @Html.Hidden("id",line.Product.ID)
+                        @Html.HiddenFor(x=>x.ReturnUrl)
+                        <input class="btn btn-sm btn-warning" type="submit" value="移除" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">总计：</td>
+            <td class="text-right">
+                @Model.Cart.ComputerTotalValue().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div class="text-center">
+    <a href="@Model.ReturnUrl" class="btn btn-primary">继续购物</a>
+    @Html.ActionLink("立即结算","Checkout",null,new {@class="btn btn-primary" })
+</div>
