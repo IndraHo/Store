@@ -14,16 +14,28 @@ namespace Store.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: null,
-                url: "Page{page}",
-                defaults: new { Controller = "Product", Action = "List" }
+                null,
+                "",
+                new { Controller = "Product", Action = "List", category = (string)null, page = 1 }
             );
-
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Product", action = "List", id = UrlParameter.Optional }
+                null,
+                "page{page}",
+                new { Controller = "Product", Action = "List", category = (string)null },
+                new { page = @"\d+" }
             );
+            routes.MapRoute(
+                null,
+                "{category}",
+                new { Controller = "Product", Action = "List", page = 1 }
+            );
+            routes.MapRoute(
+                null,
+                "{category}/page{page}",
+                 new { Controller = "Product", Action = "List" },
+                  new { page = @"\d+" }
+            );
+            routes.MapRoute(null, "{controller}/{action}");
         }
     }
 }

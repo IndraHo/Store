@@ -18,20 +18,22 @@ namespace Store.Web.Controllers
             mRepository = repository;
         }
         // GET: Product
-        public ActionResult List(int page = 1)
+        public ActionResult List(string category,int page = 1)
         {
             ProductListViewModel model = new ProductListViewModel
             {
                 Products = mRepository.Products.
-                             OrderBy(p => p.ID).
-                              Skip((page - 1) * PageSize).
-                              Take(PageSize),
+                           Where(p => category == null || p.Category == category).
+                           OrderBy(p => p.ID).
+                           Skip((page - 1) * PageSize).
+                           Take(PageSize),
                 PaginationInfo = new PaginationInfo
                 {
                     CurrentPage = page,
                     ItemPerPage = PageSize,
-                    TotalItems = mRepository.Products.Count()
-                }
+                    TotalItems = category == null ? mRepository.Products.Count() : mRepository.Products.Where(p => p.Category == category).Count()
+                },
+                CurrentCategory=category
             };
             return View(model);
         }
