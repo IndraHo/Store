@@ -1,6 +1,7 @@
 ﻿using Ninject;
 using Store.Domain.Abstract;
 using Store.Domain.Concrete;
+using Store.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Store.Web.Infrastructure
         private void AddBindings()
         {
             mKernel.Bind<IProductRepository>().To<EFProductRepository>();
+            mKernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
         }
 
         public object GetService(Type serviceType)

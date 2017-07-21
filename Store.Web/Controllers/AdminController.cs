@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Store.Web.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private IProductRepository mRepository;
@@ -27,10 +28,17 @@ namespace Store.Web.Controllers
             return View(product);
         }
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(Product product,HttpPostedFileBase image=null)
         {
             if (ModelState.IsValid)
             {
+                if (image!=null)
+                {
+                    product.ImageMimeType = image.ContentType;
+                    product.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(product.ImageData, 0, image.ContentLength);
+                }
+
                 mRepository.SaveProduct(product);
                 TempData["message"] = "保存成功";
                 return RedirectToAction("Index");
@@ -54,5 +62,6 @@ namespace Store.Web.Controllers
             }
             return RedirectToAction("Index");
         }
+       
     }
 }

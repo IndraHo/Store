@@ -1,4 +1,5 @@
 ﻿using Store.Domain.Abstract;
+using Store.Domain.Entities;
 using Store.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,15 @@ namespace Store.Web.Controllers
                 CurrentCategory=category
             };
             return View(model);
+        }
+        public ActionResult GetImage(int id)
+        {
+            Product product = mRepository.Products.FirstOrDefault(p => p.ID == id);
+            if (product != null)
+            {
+                return File(product.ImageData, product.ImageMimeType);
+            }
+            return null;
         }
     }
 }
