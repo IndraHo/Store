@@ -16,14 +16,14 @@ namespace Store.Web.Controllers
             mRepository = repository;
         }
         // GET: Nav
-        public ActionResult Menu(string category=null)
+        public ActionResult Menu(string category=null,bool horizontalLayout=false)
         {
             ViewBag.SelectedCategory = category;
             IEnumerable<string> categories = mRepository.Products
                 .Select(x => x.Category)
                 .Distinct()
                 .OrderBy(x => x);
-            return PartialView(categories);
+            return PartialView("FlexMenu",categories);
         }
     }
 }
